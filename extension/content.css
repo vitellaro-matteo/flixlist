@@ -1,0 +1,110 @@
+/* FlixList — Netflix Overlay */
+#fl-root {
+  position: fixed; bottom: 20px; right: 20px; z-index: 2147483647;
+  font-family: 'Netflix Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-size: 13px; color: #e0e0e6; line-height: 1.4;
+}
+#fl-root * { box-sizing: border-box; margin: 0; padding: 0; }
+
+#fl-toggle {
+  width: 38px; height: 38px; border-radius: 50%; border: none;
+  background: rgba(20,20,24,0.85); color: #aaa;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; backdrop-filter: blur(8px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4); transition: all 0.2s ease;
+}
+#fl-toggle:hover { background: rgba(229,9,20,0.9); color: #fff; transform: scale(1.08); }
+#fl-toggle.fl-active { background: #e50914; color: #fff; }
+
+#fl-panel {
+  position: absolute; bottom: calc(100% + 10px); right: 0;
+  width: 340px; max-height: 480px;
+  background: #141418; border: 1px solid #2a2a32; border-radius: 14px;
+  overflow: hidden; box-shadow: 0 16px 50px rgba(0,0,0,0.7);
+  display: flex; flex-direction: column; animation: fl-up 0.18s ease;
+}
+#fl-panel.fl-hidden { display: none; }
+@keyframes fl-up { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+#fl-panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-bottom: 1px solid #2a2a32; flex-shrink: 0;
+}
+#fl-panel-title { font-weight: 700; font-size: 15px; color: #fff; }
+#fl-close { background:none; border:none; color:#666; font-size:22px; cursor:pointer; padding:0 4px; line-height:1; font-family:inherit; }
+#fl-close:hover { color:#fff; }
+
+#fl-main, #fl-auth-gate { overflow-y: auto; padding: 12px 16px 16px; flex: 1; min-height: 0; }
+#fl-main::-webkit-scrollbar { width: 4px; }
+#fl-main::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+.fl-section-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#666; margin-bottom:8px; margin-top:4px; }
+.fl-divider { height:1px; background:#2a2a32; margin:12px 0; }
+
+.fl-save-info { font-size:12px; color:#aaa; margin-bottom:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+#fl-save-list { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px; }
+.fl-save-btn {
+  padding:5px 12px; background:#1e1e24; border:1px solid #333; border-radius:20px;
+  color:#ccc; font-size:12px; cursor:pointer; font-family:inherit; transition:all 0.15s; white-space:nowrap;
+}
+.fl-save-btn:hover { background:#e50914; border-color:#e50914; color:#fff; }
+.fl-save-btn:disabled { opacity: 0.5; cursor: wait; }
+.fl-save-status { font-size:11px; min-height:16px; margin-top: 4px; }
+.fl-save-status.fl-success { color:#2dd4a0; }
+.fl-save-status.fl-error { color:#f87171; }
+
+.fl-playlist-row {
+  display:flex; align-items:center; justify-content:space-between;
+  width:100%; padding:10px 12px; background:#1a1a1e; border:1px solid #222;
+  border-radius:8px; margin-bottom:6px; cursor:pointer; font-family:inherit;
+  transition:all 0.15s; color:#ddd; text-align:left;
+}
+.fl-playlist-row:hover { border-color:#e50914; background:#1e1a1a; }
+.fl-playlist-name { font-weight:500; font-size:13px; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.fl-playlist-count { font-size:11px; color:#666; background:#0f0f12; padding:2px 8px; border-radius:10px; flex-shrink:0; margin-left:8px; }
+
+.fl-new-row { display:flex; gap:6px; margin-top:8px; }
+.fl-new-row input {
+  flex:1; padding:8px 10px; background:#0f0f12; border:1px solid #2a2a32;
+  border-radius:8px; color:#eee; font-size:12px; outline:none; font-family:inherit;
+}
+.fl-new-row input:focus { border-color:#e50914; }
+.fl-new-row button { padding:8px 14px; background:#e50914; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; }
+.fl-new-row button:hover { background:#ff1a25; }
+
+.fl-back-btn { background:none; border:none; color:#888; font-size:12px; cursor:pointer; padding:0; margin-bottom:8px; font-family:inherit; }
+.fl-back-btn:hover { color:#fff; }
+.fl-detail-title { font-weight:700; font-size:15px; color:#fff; margin-bottom:12px; }
+
+.fl-item-row {
+  display:flex; align-items:center; gap:8px;
+  padding:8px 10px; background:#1a1a1e; border:1px solid #222;
+  border-radius:8px; margin-bottom:5px; transition:border-color 0.15s;
+}
+.fl-item-row:hover { border-color:#444; }
+.fl-item-num { font-size:11px; color:#555; width:18px; text-align:center; flex-shrink:0; font-variant-numeric:tabular-nums; }
+.fl-item-info { flex:1; min-width:0; }
+.fl-item-title { font-size:13px; color:#ddd; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.fl-ep { font-size:10px; color:#888; background:#0f0f12; padding:1px 6px; border-radius:4px; margin-left:6px; font-weight:400; }
+.fl-item-note { font-size:11px; color:#666; font-style:italic; margin-top:2px; }
+
+.fl-item-actions { display:flex; align-items:center; gap:4px; flex-shrink:0; }
+.fl-rename-btn {
+  background:none; border:none; color:#555; font-size:14px; cursor:pointer;
+  padding:4px; border-radius:4px; font-family:inherit; line-height:1;
+}
+.fl-rename-btn:hover { color:#fff; background:rgba(255,255,255,0.08); }
+.fl-rename-input {
+  width:100%; padding:3px 6px; background:#0f0f12; border:1px solid #e50914;
+  border-radius:4px; color:#eee; font-size:12px; outline:none; font-family:inherit;
+}
+.fl-watch-btn {
+  display:flex; align-items:center; justify-content:center;
+  width:28px; height:28px; background:#e50914; border-radius:50%;
+  color:#fff; text-decoration:none; font-size:11px; flex-shrink:0;
+  transition:all 0.15s; cursor:pointer; border:none;
+}
+.fl-watch-btn:hover { background:#ff1a25; transform:scale(1.1); }
+
+.fl-empty-msg { font-size:12px; color:#555; text-align:center; padding:16px 0; line-height:1.5; }
+.fl-loading { font-size:12px; color:#666; text-align:center; padding:12px 0; }
