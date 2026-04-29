@@ -1,7 +1,7 @@
 // FlixList — Background Service Worker
 
 const SUPABASE_URL = 'https://vkhyoiyxeakjkbagzouv.supabase.co'
-const SUPABASE_ANON = 'YOUR_ANON_KEY_HERE' // ← Paste your anon key
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZraHlvaXl4ZWFramtiYWd6b3V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NzA1NjIsImV4cCI6MjA4OTQ0NjU2Mn0.mlXeQDoNckWs0g_ECyLuzncDzZwQLSKsjkUaeUwD_yg'
 
 // ─── Token management with auto-refresh ──────────
 
