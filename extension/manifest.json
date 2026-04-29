@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "FlixList — Netflix Playlists",
+  "version": "2.0.0",
+  "description": "Create and share playlists of your favorite Netflix moments. Playlists appear as native Netflix rows.",
+  "permissions": ["storage", "activeTab"],
+  "host_permissions": ["https://*.netflix.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.netflix.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html"
+  }
+}
