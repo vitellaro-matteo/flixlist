@@ -1,106 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      width: 300px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0f0f12;
-      color: #e0e0e6;
-    }
-    .header {
-      display: flex; align-items: center; gap: 10px;
-      padding: 14px 16px; border-bottom: 1px solid #2a2a32;
-    }
-    .logo {
-      width: 26px; height: 26px; background: #e50914; border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-weight: 800; font-size: 13px;
-    }
-    .brand { font-weight: 700; font-size: 15px; }
-    .brand span { color: #e50914; }
-    .content { padding: 16px; }
-    label { display: block; font-size: 11px; color: #888; margin-bottom: 4px; font-weight: 500; }
-    input {
-      width: 100%; padding: 9px 12px; background: #1a1a1e; border: 1px solid #2a2a32;
-      border-radius: 8px; color: #eee; font-size: 13px; outline: none; margin-bottom: 10px;
-    }
-    input:focus { border-color: #e50914; }
-    .btn {
-      width: 100%; padding: 10px; background: #e50914; color: white; border: none;
-      border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; margin-bottom: 8px;
-    }
-    .btn:hover { background: #ff1a25; }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-ghost { background: transparent; border: 1px solid #2a2a32; color: #aaa; }
-    .btn-ghost:hover { border-color: #555; color: #eee; }
-    .toggle { text-align: center; font-size: 12px; color: #666; margin-top: 8px; }
-    .toggle a { color: #e50914; cursor: pointer; text-decoration: none; }
-    .msg { font-size: 12px; margin-bottom: 10px; padding: 8px 10px; border-radius: 6px; display: none; line-height: 1.4; }
-    .msg.error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #f87171; display: block; }
-    .msg.success { background: rgba(45,212,160,0.1); border: 1px solid rgba(45,212,160,0.2); color: #2dd4a0; display: block; }
-    .user-info {
-      display: flex; align-items: center; gap: 10px;
-      padding: 12px; margin-bottom: 12px; background: #1a1a1e; border-radius: 8px;
-    }
-    .avatar {
-      width: 32px; height: 32px; border-radius: 50%; background: #e50914;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 14px; color: white; flex-shrink: 0;
-    }
-    .user-name { font-weight: 600; font-size: 13px; }
-    .user-email { font-size: 11px; color: #666; word-break: break-all; }
-    .hint { font-size: 11px; color: #555; line-height: 1.5; margin-bottom: 12px; }
-    .hint strong { color: #e50914; }
-  </style>
+  <meta charset="UTF-8" />
+  <title>FlixList</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
-  <div class="header">
-    <div class="logo">F</div>
-    <div class="brand">Flix<span>List</span></div>
-  </div>
-
-  <div class="content">
-    <div id="msg"></div>
-
-    <div id="signed-out" style="display:none">
-      <div id="signin-form">
-        <label>Email</label>
-        <input type="email" id="email" placeholder="you@example.com" />
-        <label>Password</label>
-        <input type="password" id="password" placeholder="••••••••" />
-        <button class="btn" id="signin-btn">Sign In</button>
-        <div class="toggle">No account? <a id="show-signup">Sign up</a></div>
+  <div id="app">
+    <!-- AUTH VIEW -->
+    <div id="view-auth" class="view">
+      <div class="logo-row">
+        <svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span class="logo-text">Flix<span>List</span></span>
       </div>
-      <div id="signup-form" style="display:none">
-        <label>Username</label>
-        <input type="text" id="reg-username" placeholder="kramer_fan" />
-        <label>Email</label>
-        <input type="email" id="reg-email" placeholder="you@example.com" />
-        <label>Password</label>
-        <input type="password" id="reg-password" placeholder="6+ characters" />
-        <button class="btn" id="signup-btn">Create Account</button>
-        <div class="toggle">Have an account? <a id="show-signin">Sign in</a></div>
+      <p class="tagline">YouTube playlists,<br>but for Netflix.</p>
+      <form id="auth-form">
+        <div class="field-group" id="username-group" style="display:none">
+          <input type="text" id="username-input" placeholder="Username" autocomplete="username" />
+        </div>
+        <div class="field-group">
+          <input type="email" id="email-input" placeholder="Email" autocomplete="email" required />
+        </div>
+        <div class="field-group">
+          <input type="password" id="password-input" placeholder="Password" autocomplete="current-password" required />
+        </div>
+        <div id="auth-error" class="error-msg" style="display:none"></div>
+        <button type="submit" class="btn-primary" id="auth-submit">Sign In</button>
+      </form>
+      <div class="auth-toggle">
+        <span id="auth-toggle-text">Don't have an account?</span>
+        <button id="auth-toggle-btn" class="link-btn">Sign Up</button>
       </div>
     </div>
 
-    <div id="signed-in" style="display:none">
-      <div class="user-info">
-        <div class="avatar" id="avatar">?</div>
-        <div>
-          <div class="user-name" id="display-name">User</div>
-          <div class="user-email" id="display-email"></div>
+    <!-- MAIN VIEW -->
+    <div id="view-main" class="view" style="display:none">
+      <div class="header">
+        <div class="logo-row">
+          <svg class="logo-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span class="logo-text">Flix<span>List</span></span>
+        </div>
+        <button class="icon-btn" id="signout-btn" title="Sign out">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+
+      <div id="current-item-section" style="display:none">
+        <div class="section-label">NOW WATCHING</div>
+        <div class="current-item" id="current-item-card">
+          <div class="item-poster" id="current-poster"></div>
+          <div class="item-info">
+            <div class="item-title" id="current-title">—</div>
+            <div class="item-sub" id="current-sub"></div>
+          </div>
+        </div>
+        <div class="section-label" style="margin-top:14px">SAVE TO</div>
+        <div id="playlist-select-list"></div>
+        <button class="btn-secondary" id="new-playlist-btn">+ New playlist</button>
+      </div>
+
+      <div id="not-watching-section">
+        <div class="empty-state">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:#e5a00d;margin-bottom:10px"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <p>Open Netflix and start watching to save to a playlist.</p>
+          <a class="btn-ghost" href="https://www.netflix.com" target="_blank">Go to Netflix →</a>
         </div>
       </div>
-      <p class="hint">
-        On any Netflix page, click the <strong>FlixList</strong> button in the bottom-right to save moments and browse your playlists.
-      </p>
-      <button class="btn btn-ghost" id="signout-btn">Sign Out</button>
+
+      <div class="divider" style="margin:14px 0"></div>
+      <div class="section-label">MY PLAYLISTS</div>
+      <div id="my-playlists-list" class="playlists-list"></div>
+    </div>
+
+    <!-- NEW PLAYLIST MODAL -->
+    <div id="new-playlist-modal" class="modal" style="display:none">
+      <div class="modal-inner">
+        <div class="modal-header">
+          <span>New Playlist</span>
+          <button class="icon-btn" id="close-modal-btn">✕</button>
+        </div>
+        <input type="text" id="new-pl-title" placeholder="Playlist name…" class="modal-input" />
+        <div id="new-pl-error" class="error-msg" style="display:none"></div>
+        <div class="modal-actions">
+          <button class="btn-ghost" id="cancel-modal-btn">Cancel</button>
+          <button class="btn-primary" id="create-pl-btn">Create</button>
+        </div>
+      </div>
     </div>
   </div>
-
   <script src="popup.js"></script>
 </body>
 </html>
