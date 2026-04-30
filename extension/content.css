@@ -1,0 +1,261 @@
+/*
+  FlixList v3 — Netflix-native CSS
+  Tokens: #141414 bg, #181818 surface, #2f2f2f elevated, #333/#454545 borders
+          #e5e5e5 text, #b3b3b3 secondary, #8c8c8c muted, #e50914 accent
+          Netflix Sans font, 4px radius, 250ms transitions
+*/
+
+/* ═══ BROWSE ROW ══════════════════════════════════ */
+
+#fl-row {
+  position: relative; margin: 3vw 0 1vw; padding: 0 4%; z-index: 1;
+  font-family: 'Netflix Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.fl-row-title { font-size: 1.4vw; font-weight: 700; color: #e5e5e5; margin-bottom: .8vw; line-height: 1.3; }
+@media (max-width:1000px) { .fl-row-title { font-size: 16px; } }
+
+/* Carousel viewport with arrows */
+.fl-row-viewport { position: relative; }
+
+.fl-row-slider {
+  display: flex; gap: 4px;
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory; scroll-behavior: smooth;
+  scrollbar-width: none; padding-bottom: 4px;
+}
+.fl-row-slider::-webkit-scrollbar { display: none; }
+
+/* Arrow buttons */
+.fl-row-arrow {
+  position: absolute; top: 0; bottom: 4px; width: 55px; z-index: 3;
+  background: rgba(20,20,20,0.7); border: none; color: #e5e5e5;
+  font-size: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 200ms; font-family: inherit;
+}
+.fl-row-arrow:hover { background: rgba(20,20,20,0.9); }
+.fl-row-arrow-left { left: -4%; border-radius: 0 4px 4px 0; }
+.fl-row-arrow-right { right: -4%; border-radius: 4px 0 0 4px; }
+.fl-row-arrow.fl-hidden { display: none; }
+
+/* Title cards */
+.fl-title-card {
+  flex: 0 0 calc((100% - 20px) / 6); min-width: 160px;
+  scroll-snap-align: start; cursor: pointer; border-radius: 4px;
+  overflow: hidden; background: #181818; transition: transform 250ms ease, box-shadow 250ms ease;
+  border: none; padding: 0; text-align: left; font-family: inherit; color: inherit; outline: none;
+}
+.fl-title-card:hover { transform: scale(1.05); z-index: 2; box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
+@media (max-width:1400px) { .fl-title-card { flex: 0 0 calc((100% - 16px) / 5); } }
+@media (max-width:1000px) { .fl-title-card { flex: 0 0 calc((100% - 12px) / 4); } }
+@media (max-width:700px) { .fl-title-card { flex: 0 0 calc((100% - 8px) / 3); min-width: 120px; } }
+
+.fl-title-card-image { position: relative; width: 100%; padding-top: 56.25%; border-radius: 4px 4px 0 0; overflow: hidden; }
+.fl-title-card-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); background: rgba(0,0,0,0.15); opacity: 0; transition: opacity 200ms; }
+.fl-title-card:hover .fl-title-card-overlay { opacity: 1; }
+.fl-title-card-badge { position: absolute; bottom: 6px; right: 8px; font-size: 11px; font-weight: 700; color: #e5e5e5; background: rgba(0,0,0,0.75); padding: 1px 6px; border-radius: 2px; }
+.fl-title-card-name { padding: 8px 10px 10px; font-size: 12px; font-weight: 600; color: #e5e5e5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0; }
+
+.fl-row-create { display: flex; gap: 8px; margin-top: 12px; max-width: 400px; }
+.fl-row-input { flex: 1; padding: 8px 14px; background: #333; color: #e5e5e5; border: 1px solid #454545; border-radius: 4px; font-size: 13px; font-family: inherit; outline: none; }
+.fl-row-input:focus { border-color: #e5e5e5; }
+.fl-row-input::placeholder { color: #8c8c8c; }
+.fl-row-create-btn { padding: 8px 16px; white-space: nowrap; background: #e50914; color: #fff; border: none; border-radius: 4px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; transition: background 150ms; }
+.fl-row-create-btn:hover { background: #f6121d; }
+.fl-row-create-btn:disabled { opacity: .5; cursor: wait; }
+.fl-row-empty, .fl-row-loading { color: #8c8c8c; font-size: 14px; padding: 20px 0; text-align: center; width: 100%; }
+
+/* ═══ DETAIL MODAL ════════════════════════════════ */
+
+#fl-modal-backdrop {
+  position: fixed; inset: 0; z-index: 99999;
+  background: rgba(0,0,0,0.7);
+  display: flex; align-items: flex-start; justify-content: center; padding-top: 2em;
+  overflow-y: auto;
+  font-family: 'Netflix Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing: antialiased;
+  animation: fl-fade 200ms ease;
+}
+@keyframes fl-fade { from { opacity:0 } to { opacity:1 } }
+
+#fl-modal {
+  width: 90%; max-width: 900px; background: #181818;
+  border-radius: 6px; overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 16px 70px rgba(0,0,0,0.8);
+  margin-bottom: 3em;
+  animation: fl-modal-up 300ms cubic-bezier(0.4,0,0,1);
+}
+@keyframes fl-modal-up { from { opacity:0; transform:translateY(40px) scale(0.97) } to { opacity:1; transform:translateY(0) scale(1) } }
+
+.fl-modal-hero { position: relative; height: 45vw; max-height: 400px; min-height: 200px; display: flex; align-items: flex-end; overflow: hidden; }
+.fl-modal-hero-gradient { position: absolute; inset: 0; background: linear-gradient(to top, #181818 0%, transparent 50%); }
+.fl-modal-hero-content { position: relative; z-index: 1; padding: 0 48px 32px; width: 100%; }
+.fl-modal-logo { font-size: clamp(24px,3vw,40px); font-weight: 900; color: #e5e5e5; margin-bottom: 8px; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+.fl-modal-hero-meta { font-size: 14px; color: #8c8c8c; }
+.fl-modal-author { color: #b3b3b3; }
+
+.fl-modal-actions { display: flex; gap: 8px; margin-top: 12px; }
+.fl-modal-action-btn {
+  padding: 6px 14px; font-size: 12px; font-weight: 600;
+  background: rgba(255,255,255,0.1); color: #e5e5e5;
+  border: 1px solid #666; border-radius: 4px;
+  cursor: pointer; font-family: inherit; transition: all 150ms;
+}
+.fl-modal-action-btn:hover { background: rgba(255,255,255,0.2); }
+.fl-modal-action-danger { color: #e87c03; border-color: #e87c03; }
+.fl-modal-action-danger:hover { background: rgba(232,124,3,0.2); }
+
+.fl-modal-close { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 50%; background: #141414; color: #e5e5e5; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 150ms; z-index: 2; }
+.fl-modal-close:hover { background: #333; }
+.fl-modal-rename-input { width: 80%; padding: 6px 12px; background: #333; color: #e5e5e5; border: 1px solid #e50914; border-radius: 4px; font-size: clamp(20px,2.5vw,36px); font-weight: 900; font-family: inherit; outline: none; }
+
+.fl-modal-body { padding: 0 48px 48px; }
+@media (max-width:600px) { .fl-modal-hero-content { padding: 0 24px 24px; } .fl-modal-body { padding: 0 24px 32px; } }
+.fl-modal-section-head { font-size: 20px; font-weight: 700; color: #e5e5e5; margin-bottom: 20px; }
+.fl-modal-episodes { display: flex; flex-direction: column; }
+
+/* Episode rows */
+.fl-ep { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid #333; border-radius: 4px; transition: background 150ms; }
+.fl-ep:hover { background: rgba(255,255,255,0.04); }
+.fl-ep:last-child { border-bottom: none; }
+.fl-ep.fl-ep-dragging { opacity: .4; }
+.fl-ep.fl-ep-dragover { border-top: 2px solid #e50914; }
+
+.fl-ep-index { width: 24px; text-align: center; flex-shrink: 0; font-size: 18px; color: #8c8c8c; font-variant-numeric: tabular-nums; }
+.fl-ep-grip { flex-shrink: 0; font-size: 16px; color: #555; cursor: grab; user-select: none; letter-spacing: 1px; }
+.fl-ep-grip:active { cursor: grabbing; }
+
+.fl-ep-thumb { position: relative; width: 130px; height: 73px; border-radius: 4px; overflow: hidden; flex-shrink: 0; }
+@media (max-width:600px) { .fl-ep-thumb { width: 100px; height: 56px; } }
+.fl-ep-play-icon { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; opacity: 0; transition: opacity 200ms; background: rgba(0,0,0,0.35); }
+.fl-ep:hover .fl-ep-play-icon { opacity: 1; }
+
+.fl-ep-meta { flex: 1; min-width: 0; }
+.fl-ep-title-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.fl-ep-title { font-size: 14px; font-weight: 600; color: #e5e5e5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fl-ep-duration { font-size: 13px; color: #8c8c8c; flex-shrink: 0; }
+.fl-ep-synopsis { font-size: 13px; color: #8c8c8c; line-height: 1.4; margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.fl-ep-rename { width: 100%; padding: 4px 8px; background: #333; color: #e5e5e5; border: 1px solid #e50914; border-radius: 4px; font-size: 14px; font-family: inherit; outline: none; }
+
+.fl-ep-remove {
+  flex-shrink: 0; width: 28px; height: 28px;
+  background: none; border: 1px solid #555; border-radius: 50%;
+  color: #8c8c8c; font-size: 18px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-family: inherit; transition: all 150ms;
+  opacity: 0;
+}
+.fl-ep:hover .fl-ep-remove { opacity: 1; }
+.fl-ep-remove:hover { color: #e50914; border-color: #e50914; background: rgba(229,9,20,0.1); }
+
+.fl-modal-empty, .fl-modal-loading { color: #8c8c8c; font-size: 14px; padding: 32px 0; text-align: center; line-height: 1.5; }
+
+/* ═══ WATCH DROPDOWN (Spotify-like) ═══════════════ */
+
+#fl-watch-root {
+  position: fixed; bottom: 100px; right: 24px; z-index: 2147483647;
+  font-family: 'Netflix Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.fl-watch-btn {
+  display: flex; align-items: center; gap: 6px; padding: 8px 16px;
+  background: rgba(42,42,42,0.85); color: #e5e5e5;
+  border: 1px solid #666; border-radius: 4px;
+  font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer;
+  backdrop-filter: blur(8px); transition: all 200ms;
+}
+.fl-watch-btn:hover { background: #e50914; color: #fff; border-color: #e50914; }
+
+.fl-watch-dd {
+  position: absolute; bottom: calc(100% + 8px); right: 0;
+  width: 320px; max-height: 440px;
+  background: #2f2f2f; border-radius: 6px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+  overflow: hidden; display: flex; flex-direction: column;
+  animation: fl-dd-up 150ms ease;
+}
+.fl-watch-dd.fl-hidden { display: none; }
+@keyframes fl-dd-up { from { opacity:0; transform:translateY(4px) } to { opacity:1; transform:translateY(0) } }
+
+.fl-watch-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 14px; border-bottom: 1px solid #454545;
+  flex-shrink: 0;
+}
+.fl-watch-header-title { font-size: 14px; font-weight: 700; color: #e5e5e5; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fl-watch-back {
+  background: none; border: none; color: #8c8c8c; font-size: 22px; cursor: pointer;
+  font-family: inherit; padding: 0 4px; line-height: 1; transition: color 150ms;
+}
+.fl-watch-back:hover { color: #e5e5e5; }
+
+.fl-watch-content { flex: 1; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #555 transparent; }
+.fl-watch-content::-webkit-scrollbar { width: 4px; }
+.fl-watch-content::-webkit-scrollbar-thumb { background: #555; border-radius: 2px; }
+
+/* Playlist items in the dropdown */
+.fl-watch-pl-item {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; padding: 10px 14px; background: none; border: none;
+  color: #e5e5e5; font-size: 13px; font-family: inherit; cursor: pointer;
+  text-align: left; transition: background 150ms;
+}
+.fl-watch-pl-item:hover { background: rgba(255,255,255,0.08); }
+.fl-watch-pl-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+.fl-watch-pl-count { font-size: 11px; color: #8c8c8c; background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 10px; flex-shrink: 0; margin-left: 8px; }
+
+/* Episode items in watch dropdown detail */
+.fl-watch-ep {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: background 150ms;
+}
+.fl-watch-ep:hover { background: rgba(255,255,255,0.05); }
+.fl-watch-ep:last-child { border-bottom: none; }
+.fl-watch-ep.fl-watch-ep-dragging { opacity: .3; }
+.fl-watch-ep.fl-watch-ep-dragover { border-top: 2px solid #e50914; }
+
+.fl-watch-ep-grip { color: #555; font-size: 14px; cursor: grab; user-select: none; flex-shrink: 0; }
+.fl-watch-ep-grip:active { cursor: grabbing; }
+.fl-watch-ep-info { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; }
+.fl-watch-ep-name { font-size: 12px; color: #e5e5e5; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fl-watch-ep-tag { font-size: 10px; color: #8c8c8c; flex-shrink: 0; }
+.fl-watch-ep-play {
+  flex-shrink: 0; background: none; border: none; color: #46d369;
+  font-size: 12px; cursor: pointer; padding: 4px; border-radius: 50%;
+  transition: all 150ms; font-family: inherit;
+}
+.fl-watch-ep-play:hover { color: #fff; background: rgba(70,211,105,0.2); }
+.fl-watch-ep-del {
+  flex-shrink: 0; background: none; border: none; color: #555;
+  font-size: 18px; cursor: pointer; padding: 2px 6px; border-radius: 4px;
+  transition: all 150ms; font-family: inherit; line-height: 1;
+}
+.fl-watch-ep-del:hover { color: #e50914; background: rgba(229,9,20,0.1); }
+
+/* Add current video button */
+.fl-watch-add-current {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; padding: 10px 14px;
+  background: rgba(229,9,20,0.1); color: #e50914;
+  border: none; border-bottom: 1px solid #454545;
+  font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer;
+  transition: background 150ms;
+}
+.fl-watch-add-current:hover { background: rgba(229,9,20,0.2); }
+.fl-watch-add-current:disabled { opacity: .5; cursor: wait; }
+
+/* Create row */
+.fl-watch-create-row { display: flex; gap: 6px; padding: 8px 10px; border-bottom: 1px solid #454545; }
+.fl-watch-input { flex: 1; padding: 6px 10px; background: #1a1a1a; color: #e5e5e5; border: 1px solid #454545; border-radius: 4px; font-size: 12px; font-family: inherit; outline: none; }
+.fl-watch-input:focus { border-color: #e5e5e5; }
+.fl-watch-input::placeholder { color: #8c8c8c; }
+.fl-watch-create-sm { padding: 6px 10px; background: #e50914; color: #fff; border: none; border-radius: 4px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; }
+.fl-watch-create-sm:hover { background: #f6121d; }
+
+.fl-watch-status { font-size: 11px; color: #8c8c8c; padding: 4px 14px 8px; min-height: 20px; flex-shrink: 0; }
+.fl-status-ok { color: #46d369; }
+.fl-status-err { color: #e87c03; }
+.fl-watch-empty, .fl-watch-loading { color: #8c8c8c; font-size: 12px; padding: 14px; text-align: center; }
+
+.fl-hidden { display: none !important; }
